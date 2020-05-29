@@ -123,5 +123,6 @@ catch
 ```
 
 ### HandsOn 진행
-<<<<<<< HEAD
-[Azure Database for MySQL](../master/AzureDatabaseforMySQL/README.md)
+[Azure Database for MySQL](../master/AzureDatabaseforMySQL/README.md)  
+[Azure SQL Database](../master/AzureSQLDatabase/README.md)  
+[Azure CosmosDB](../master/AzureCosmosDB/README.md)  
