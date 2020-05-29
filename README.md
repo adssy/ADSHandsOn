@@ -123,4 +123,4 @@ catch
 ```
 
 ### HandsOn 진행
-[Azure Database for MySQL](../Azure Database for MySQL)
+[Azure Database for MySQL](../Azure-Database-for-MySQL)
