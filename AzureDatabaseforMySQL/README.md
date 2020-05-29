@@ -7,19 +7,60 @@ Azure CLI로 아래와 같이 실행 합니다
 
 ```powershell
 # 기존 vm과 동일한 리소스 그룹 (만일 없다면 신규 생성 필요 az group create --name "resourceGroupName" --location "koreacentral")
-$resourceGroup= "rg-aztest"
-$location= "koreacentral"
-$skuName= "GP_Gen5_2"
-$version= "5.7"
+$resourceGroup="rg-aztest"
+$location="koreacentral"
+$skuName="GP_Gen5_2"
+$version="5.7"
 
 # 계정 정보 입력 및 MySQL 서버명 입력
-$mySQLName= "mysqlname"
-$userName= "username"
-$passWord= "password"
+$mySQLName="mysqlname"
+$userName="username"
+$passWord="password"
 
 
 az mysql server create --resource-group $resourceGroup --name $mySQLName  --location $location --admin-user $userName --admin-password $passWord --sku-name $skuName --version $version
 ```
+
+### 방화벽 설정 및 기존 네트워크와 Service Endpoint 연결
+Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으로 핸들링 됩니다  
+기존 서비스와는 service endpoint를 통하여 서브넷간의 통신을 할 수 있고, Public ip로 통신도 가능 합니다  
+
+기존 생성된 Vnet에서 MySQL 서버에 접속할 수 있도록 Service endpoint를 추가 합니다  
+```powershell
+# 생성된 VM의 vnet과 subnet을 입력 합니다
+$resourceGroup="rg-aztest"
+$vnetName="vnet-aztest"
+$subnetName="subnet-azsn"
+$ruleName="allow-azsn"
+$mySQLName="mysqlname"
+
+# 서브넷에 service endpoint 추가
+az network vnet subnet update -g $resourceGroup -n $subnetName --vnet-name $vnetName --service-endpoints Microsoft.SQL
+# mysql rule 추가
+az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --vnet-name $vnetName --subnet $subnetName
+```
+
+만일 회사나 집 등 외부에서 접속하기 위해서는 public ip를 접속 가능하도록 변경 합니다  
+```powershell
+$resourceGroup="rg-aztest"
+$mySQLName="mysqlname"
+$ruleName="allowmyip"
+$ipAddress="0.0.0.0"
+
+az mysql server firewall-rule create -g $resourceGroup -s $mySQLName -n $ruleName --start-ip-address $ipAddress --end-ip-address $ipAddress
+```
+
+또한 service endpoint외에 사설 통신만 사용할 수 있는 private link로 운영할 수도 있습니다  
+![private link](https://docs.microsoft.com/ko-kr/azure/mysql/media/concepts-data-access-and-security-private-link/show-private-link-overview.png)  
+[참고링크](https://docs.microsoft.com/ko-kr/azure/mysql/concepts-data-access-security-private-link)
+
+### MySQL 접속 확인
+VM에 설치된 MySQL Workbench를 통하여 생성된 MySQL Server에 접속 합니다  
+Hostname : {mySQLName}.mysql.database.azure.com  
+Port : 3306  
+Username : {userName@mySQLName}  
+
+
 
 ### Time zone 변경
 Azure Database for MySQL은 PaaS 서비스이기 때문에 로컬 서버의 시간을 변경할 수 없습니다  
@@ -55,8 +96,8 @@ SET time_zone = 'Asia/Seoul';
 아래 Azure CLI 코드를 사용하여 서버 레벨의 환경 변수를 변경 합니다
 
 ```powershell
-$resourceGroup= "rg-aztest"
-$mySQLName= "mysqlname"
+$resourceGroup="rg-aztest"
+$mySQLName="mysqlname"
 
 # 타임존 변경
 az mysql server configuration set --name time_zone --resource-group $resourceGroup --server $mySQLName --value "Asia/Seoul"
@@ -67,10 +108,65 @@ az mysql server configuration set --name collation_server --resource-group $reso
 
 ```
 
-### 방화벽 설정 및 기존 네트워크와 Public Endpoint 연결
-Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으로 핸들링 됩니다  
-기존 서비스와는 public endpoint를 통하여 서브넷간의 통신을 할 수 있고, Public ip로 통신도 가능 합니다  
+### 특정 시점 복원
+Azure Database for MySQL에서는 다양한 방식 (Azure Portal, Azure CLI, Azure Powershell 등)으로 손쉽게 특정 시점으로 복원할 수 있습니다  
+샘플 데이터베이스를 생성 후 특정 테이블을 실수로 삭제 한 뒤 삭제 이전 시점으로 복원하는 테스트를 진행 합니다  
+
+MySQL Workbench를 실행한 후 [샘플 데이터베이스](/AzureDatabaseforMySQL/mysqlsampledatabase.sql) 를 전체 실행합니다  
+
+이후 테이블을 삭제하고 삭제된 시간을 따로 기록해 둡니다
+
+```sql
+SELECT UTC_TIMESTAMP();
+
+DROP TABLE classicmodels.customers;
+```
+
+#### Portal에서 실행
+생성된 Azure Database for MySQL에서 개요에서 복원을 선택 합니다
+![mysql00](https://azmyhanson.blob.core.windows.net/azcon/00_mysql_portal.jpg)
+
+복원 시점 항목에서 DROP TABLE 작업한 시점을 입력 합니다  
+새 서버명을 입력 후 확인 버튼을 클릭 합니다  
+![mysql01](https://azmyhanson.blob.core.windows.net/azcon/01_mysql_portal.jpg)
+
+#### CLI 로 실행
+
+```powershell
+$resourceGroup="rg-aztest"
+$newServerName="newservername"
+$mySQLName="mysqlname"
+$restorePoint="2020-05-13T13:59:00Z"
+
+az mysql server restore --resource-group $resourceGroup --name $newServerName --restore-point-in-time $restorePoint --source-server $mySQLName
+```
 
 
-또한 public endpoint외에 사설 통신만 사용할 수 있는 private link로 운영할 수도 있습니다  
-![private link](https://docs.microsoft.com/ko-kr/azure/mysql/media/concepts-data-access-and-security-private-link/show-private-link-overview.png)
+#### 복원된 서버로 접속
+새로 복원된 서버는 방화벽의 정보는 가져오지만 설정한 Vnet 규칙은 가져오지 않습니다  
+기존과 동일하게 신규 서버에 대한 Vnet Rule을 추가 합니다  
+
+```powershell
+# 생성된 VM의 vnet과 subnet을 입력 합니다
+$resourceGroup="rg-aztest"
+$vnetName="vnet-aztest"
+$subnetName="subnet-azsn"
+$ruleName="allow-azsn"
+$mySQLName="restoremysqlname"
+
+# mysql rule 추가
+az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --vnet-name $vnetName --subnet $subnetName
+```
+
+접속 후 삭제 된 classicmodels.customers 테이블이 존재 하는지 확인 합니다  
+
+이렇게 복원된 DB로 각 Application이 접속할 수 있도록 Application에서 MySQL Endpoint들을 모두 변경해주거나  
+mysqldump 등 도구를 통해서 Restore된 신규 MySQL에서 Data를 Export, 기존 MySQL에 Import할 수 있습니다  
+
+cmd console에서 MySQL 설치 경로로 이동 후 다음과 같은 명령어로 복구할 수 있습니다  
+
+```console
+.\mysqldump.exe -p{password} --user={user} --host={restore mysql host} --protocol=tcp --port=3306 --skip-column-statistics "classicmodels" "customers" > {output path.sql}
+
+.\mysql.exe -p{password} --user={user} --host={main mysql host} --port=3306 --protocol=tcp --default-character-set=utf8 --comments --database=classicmodels  < {output path.sql}
+```
