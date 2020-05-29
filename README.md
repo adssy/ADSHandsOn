@@ -66,11 +66,37 @@ az vm open-port --port 3389 --resource-group $resourceGroupName --name $vmName
 
 
 ### HandsOn 설치파일 다운로드 및 설치
-수동 설치  
-[SSMS](https://docs.microsoft.com/ko-kr/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15) [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) [Robo3t](https://robomongo.org/download)  
-
 자동 설치  
-생성된 VM 접속 후 Powershell [초기화 스크립트](/Scripts/init_vm.ps1) 실행
+생성된 VM 접속 후 Powershell 
+
+MySQL Workbench
+```powershell
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri "https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.20-winx64.msi" -OutFile .\mysql-workbench-community-8.0.20-winx64.msi; 
+Start-Process msiexec.exe -Wait -ArgumentList '/I mysql-workbench-community-8.0.20-winx64.msi /quiet'; 
+```
+
+SQL Server Management Studio
+```powershell
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri "https://aka.ms/ssmsfullsetup" -OutFile .\SSMS-Setup-KOR.exe; 
+
+$Parms = " /Install /Quiet /Norestart /Logs log.txt"
+$Prms = $Parms.Split(" ")
+& .\SSMS-Setup-KOR.exe $Prms | Out-Null
+```
+
+Robo 3T
+```powershell
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri "https://download-test.robomongo.org/windows/robo3t-1.3.1-windows-x86_64-7419c406.zip" -OutFile .\robo3t.zip; 
+Expand-Archive .\robo3t.zip -DestinationPath "C:\Robo3t"
+```
+
+자동 설치 실패 시 수동 설치  
+[SSMS](https://docs.microsoft.com/ko-kr/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)  
+[MySQL Workbench](https://dev.mysql.com/downloads/workbench/)  
+[Robo3t](https://robomongo.org/download)  
 
 ### HandsOn 진행
 [Azure Database for MySQL](/AzureDatabaseforMySQL/README.md)  
