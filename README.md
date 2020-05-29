@@ -1,7 +1,8 @@
-# ADSHandsOn-SK
-Azure Database Services handson
+# ADSHandsOn-SK 사전 준비
+Azure Database Services handson을 진행하기 위해서  
+테스트용 VM 배포 및 DBMS Tool (Mysql Workbench / SQL Server Management Studio / Robo 3T) 다운로드 및 설치를 진행 합니다
 
-## Azure CLI 설치
+### Azure CLI 설치
 [Azure CLI Download](https://aka.ms/installazurecliwindows)  
 수동 설치 혹은 PowerShell을 사용하여 Azure CLI를 설치할 수도 있습니다   
 관리자 권한으로 PowerShell을 시작하고 다음 명령을 실행합니다  
@@ -22,7 +23,7 @@ az account set --subscription "{your subscription}"
 
 ### Azure VM 생성
 ```powershell
-#!/bin/bash
+# Parameters 임의로 구성되었으며 수정 가능
 
 $location="koreacentral"
 $resourceGroupName="rg-aztest"
@@ -59,16 +60,15 @@ az vm create --resource-group $resourceGroupName --name $vmName --location $loca
 
 # Open port 3389 to allow RDP traffic to host.
 az vm open-port --port 3389 --resource-group $resourceGroupName --name $vmName
-
-$execsetting = @{
-    "fileUris" = (,"https://azmyhanson.blob.core.windows.net/azcon/ps_ets.ps1");
-    "commandToExecute" = "powershell.exe -ExecutionPolicy Unrestricted -File init_v0.1.ps1"
-}
-
 ```
 
 
 ### HandsOn 설치파일 다운로드 및 설치
+수동 설치  
+[SSMS](https://docs.microsoft.com/ko-kr/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15) [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) [Robo3t](https://robomongo.org/download)  
+
+자동 설치  
+생성된 VM 접속 후 아래 스크립트 실행
 ```powershell
 function WriteLog
 {
@@ -94,6 +94,12 @@ try {
     Copy-Item -Path "Z:\*" -Destination "C:\" -Recurse -ErrorAction Stop
     WriteLog "Copy Complete"
 
+    WriteLog "Start Install Azure CLI"
+    Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; 
+    Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; 
+    rm .\AzureCLI.msi
+    WriteLog "Complete Install Azure CLI"
+
     $path = "C:\AzHansOn\Scripts"
 
     $pslist = Get-ChildItem -Path $path
@@ -115,3 +121,6 @@ catch
     WriteLog "Error"
 }
 ```
+
+### HandsOn 진행
+[Azure Database for MySQL](../Azure Database for MySQL)
