@@ -170,3 +170,9 @@ cmd console에서 MySQL 설치 경로로 이동 후 다음과 같은 명령어�
 
 .\mysql.exe -p{password} --user={user} --host={main mysql host} --port=3306 --protocol=tcp --default-character-set=utf8 --comments --database=classicmodels  < {output path.sql}
 ```
+
+### Geo-Replication
+
+
+### Slow Query 모니터링
+

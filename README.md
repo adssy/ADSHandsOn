@@ -26,9 +26,11 @@ az account set --subscription "{your subscription}"
 # Parameters 임의로 구성되었으며 수정 가능
 
 $location="koreacentral"
-$resourceGroupName="rg-aztest"
+$resourceGroup="rg-aztest"
 $vnetName="vnet-aztest"
 $subnetName="subnet-azsn"
+
+
 $publicIPName="pip-aztestvm"
 $nsgName="nsg-aztest"
 $nicName="nic-aztest"
@@ -41,31 +43,31 @@ $AdminPassword="password"
 
 
 # Create a resource group.
-az group create --name $resourceGroupName --location $location
+az group create --name $resourceGroup --location $location
 
 # Create a virtual network.
-az network vnet create --resource-group $resourceGroupName --name $vnetName --subnet-name $subnetName
+az network vnet create --resource-group $resourceGroup --name $vnetName --subnet-name $subnetName
 
 # Create a public IP address.
-az network public-ip create --resource-group $resourceGroupName --name $publicIPName
+az network public-ip create --resource-group $resourceGroup --name $publicIPName
 
 # Create a network security group.
-az network nsg create --resource-group $resourceGroupName --name $nsgName
+az network nsg create --resource-group $resourceGroup --name $nsgName
 
 # Create a virtual network card and associate with public IP address and NSG.
-az network nic create --resource-group $resourceGroupName --name $nicName `
+az network nic create --resource-group $resourceGroup --name $nicName `
 --vnet-name $vnetName --subnet $subnetName --network-security-group $nsgName --public-ip-address $publicIPName
 
 # Create a virtual machine. 
-az vm create --resource-group $resourceGroupName --name $vmName --location $location --nics $nicName --image win2016datacenter `
+az vm create --resource-group $resourceGroup --name $vmName --location $location --nics $nicName --image win2016datacenter `
 --admin-username $AdminUserName --admin-password $AdminPassword --size $vmSize
 
 # Open port 3389 to allow RDP traffic to host.
-az vm open-port --port 3389 --resource-group $resourceGroupName --name $vmName
+az vm open-port --port 3389 --resource-group $resourceGroup --name $vmName
 ```
 
 
-### HandsOn 설치파일 다운로드 및 설치
+### HandsOn 진행을 위한 Tools 설치파일 다운로드 및 설치
 자동 설치  
 생성된 VM 접속 후 Powershell 
 
