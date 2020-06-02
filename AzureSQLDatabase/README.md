@@ -1,7 +1,7 @@
 ## ADSHandsOn Azure SQL Database
 기존 환경 마이그레이션 혹은 신규 서비스 구축 시 진행해야 할 기본 구축 가이드  
 
-### Azure SQL Database 생성 (General purpose - 1vCore)
+### 01. Azure SQL Database 생성 (General purpose - 1vCore)
 ```powershell
 $resourceGroup="rg-aztest"
 $location="koreacentral"
@@ -16,7 +16,7 @@ az sql server create -l $location -g $resourceGroup -n $serverName -u $userName 
 az sql db create -g $resourceGroup -s $serverName -n $dbName --collation $collation --sample-name AdventureWorksLT -e GeneralPurpose -f Gen4 -c 1
 ```
 
-### 방화벽 및 Service Endpoint 추가
+### 02. 방화벽 및 Service Endpoint 추가
 ```powershell
 $vnetName="vnet-aztest"
 $subnetName="subnet-azsn"
@@ -35,7 +35,7 @@ $ipAddress="0.0.0.0"
 az sql server firewall-rule create -g $resourceGroup -s $serverName -n $ruleName --start-ip-address $ipAddress --end-ip-address $ipAddress
 ```
 
-### Geo-Replication
+### 03. Geo-Replication
 Azure SQL에서는 손쉽게 전 세계적으로 Replication을 구성할 수 있습니다  
 ![sqlgeorep](https://docs.microsoft.com/ko-kr/azure/azure-sql/database/media/active-geo-replication-overview/geo-replication.png)  
 
@@ -49,7 +49,7 @@ az sql server create --name $repServerName --resource-group $resourceGroup --loc
 az sql db replica create --name $dbName --partner-server $repServerName --resource-group $resourceGroup --server $serverName
 ```
 
-### Failover Group
+### 04. Failover Group
 Geo-Replication에서는 slave node를 master로 fail-over 하려면 수동으로 진행 가능 합니다  
 지역간의 fail-over를 자동으로 관리하기 위해서는 Failover Group을 사용하여야 합니다  
 
@@ -68,7 +68,7 @@ FOG (Failover group)을 사용하면 각 SQL Server의 endpoint를 사용하지 
 ![fogendpoint](https://azmyhanson.blob.core.windows.net/azcon/01_fogendpoint.jpg)
 
 
-### Azure SQL Database 생성 (Business critical - 1vCore)
+### 05. Azure SQL Database 생성 (Business critical - 1vCore)
 Azure SQL Database Business critical 혹은 Premium tier 에서는 별도의 비용 없이 Zone Redundant (지원하는 지역에 한함) 및 Read-Only Replica를 사용할 수 있습니다
 
 ![sqlbc](https://docs.microsoft.com/en-us/azure/azure-sql/database/media/read-scale-out/business-critical-service-tier-read-scale-out.png)
@@ -100,7 +100,7 @@ SSMS에서 Connection String을 추가하기 위해서는 옵션을 클릭 후 �
 ![ssms00](https://azmyhanson.blob.core.windows.net/azcon/00_ssms_connection.jpg)
 
 
-### Time zone 변경
+### 06. Time zone 변경
 Azure SQL은 Timezone을 선택할 수 없으며 UTC 0으로 제공 됩니다 (Managed Instance는 Time zone 선택 가능)  
 CURRENT_TIMESTAMP, GETDATE() 등 날짜 관련 함수를 사용하면 시간값이 UTC 0로 반환 되는 것을 확인할 수 있습니다
 
@@ -129,7 +129,7 @@ SELECT dbo.FN_GETDATE()
 ```
 
 
-### Elastic Query 
+### 07. Elastic Query 
 Azure SQL에서는 데이터베이스 간 Join 혹은 조회 및 Linked Server를 사용할 수 없습니다  
 대신 Elastic Query를 통하여 원격지의 데이터를 조회할 수 있습니다  
 

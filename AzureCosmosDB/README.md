@@ -1,6 +1,6 @@
 ## Azure Cosmos DB
 
-### Azure Cosmos DB MongoDB API
+### 01. Azure Cosmos DB MongoDB API
 ```powershell
 $resourceGroup="rg-aztest"
 $location="koreacentral"
@@ -86,7 +86,7 @@ azure portal에서 cosmos db account를 선택 합니다
 완료 된 이후 동일 쿼리를 다시 실행해 봅니다  
 
 
-### Azure CosmosDB SQL API
+### 02. Azure CosmosDB SQL API
 ```powershell
 $resourceGroup="rg-aztest"
 $location="koreacentral"
