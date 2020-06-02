@@ -73,6 +73,15 @@ az vm open-port --port 3389 --resource-group $resourceGroup --name $vmName
 
 MySQL Workbench
 ```powershell
+# vs 재배포 도구 설치
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Invoke-WebRequest -Uri "https://aka.ms/vs/16/release/vc_redist.x64.exe" -OutFile .\vc_redist.x64.exe; 
+
+$Parms = " /Install /Quiet /Norestart /Logs log.txt"
+$Prms = $Parms.Split(" ")
+& .\vc_redist.x64.exe $Prms | Out-Null
+
+# mysql workbench 설치
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.20-winx64.msi" -OutFile .\mysql-workbench-community-8.0.20-winx64.msi; 
 Start-Process msiexec.exe -Wait -ArgumentList '/I mysql-workbench-community-8.0.20-winx64.msi /quiet'; 
