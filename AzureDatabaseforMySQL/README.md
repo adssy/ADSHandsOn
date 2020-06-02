@@ -171,8 +171,26 @@ cmd console에서 MySQL 설치 경로로 이동 후 다음과 같은 명령어�
 .\mysql.exe -p{password} --user={user} --host={main mysql host} --port=3306 --protocol=tcp --default-character-set=utf8 --comments --database=classicmodels  < {output path.sql}
 ```
 
-### Geo-Replication
-
-
 ### Slow Query 모니터링
+Azure Portal에서 생성된 MySQL을 찾아 왼쪽 항목에서 서버로그 탭을 선택 합니다  
+상단에 매개 변수 편집을 클릭 합니다  
 
+![serverlog](https://azmyhanson.blob.core.windows.net/azcon/02_mysql_serverlog.jpg)
+
+아래 항목 수정 후 저장 버튼을 클릭 합니다  
+- log_output : file
+- long_query_time : 3
+- slw_query_log : ON
+
+
+이제 MySQL Workbench에서 3초 이상 걸리는 쿼리를 사용 합니다  
+
+```sql
+SELECT /*+ MAX_EXECUTION_TIME(5000) */ 1 
+FROM classicmodels.customers WHERE SLEEP(1);
+```
+
+Azure Portal에서 생성된 서버 로그를 확인 합니다  
+
+
+### Geo-Replication
