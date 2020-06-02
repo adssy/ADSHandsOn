@@ -30,7 +30,7 @@ Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으
 # 생성된 VM의 vnet과 subnet을 입력 합니다
 $resourceGroup="rg-adstest"
 $vnetName="vnet-adstest"
-$subnetName="subnet-azsn"
+$subnetName="subnet-adstest"
 $ruleName="allow-azsn"
 $mySQLName="mysqlname"
 

@@ -3,7 +3,7 @@
 
 ### 01. Azure SQL Database 생성 (General purpose - 1vCore)
 ```powershell
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $location="koreacentral"
 $serverName="myservername"
 $dbName="myDbname"
@@ -18,9 +18,9 @@ az sql db create -g $resourceGroup -s $serverName -n $dbName --collation $collat
 
 ### 02. 방화벽 및 Service Endpoint 추가
 ```powershell
-$vnetName="vnet-aztest"
-$subnetName="subnet-azsn"
-$ruleName="allow-azsn"
+$vnetName="vnet-adstest"
+$subnetName="subnet-adstest"
+$ruleName="allow-adstest"
 
 az sql server vnet-rule create --server $serverName --name $ruleName -g $resourceGroup --subnet $subnetName --vnet-name $vnetName
 
