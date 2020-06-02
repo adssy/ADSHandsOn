@@ -71,7 +71,6 @@ az vm open-port --port 3389 --resource-group $resourceGroup --name $vmName
 자동 설치  
 생성된 VM 접속 후 Powershell 
 
-MySQL Workbench
 ```powershell
 # vs 재배포 도구 설치
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -85,19 +84,16 @@ $Prms = $Parms.Split(" ")
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.20-winx64.msi" -OutFile .\mysql-workbench-community-8.0.20-winx64.msi; 
 Start-Process msiexec.exe -Wait -ArgumentList '/I mysql-workbench-community-8.0.20-winx64.msi /quiet'; 
-```
 
-SQL Server Management Studio
-```powershell
+# SQL Server Management Studio 설치
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://aka.ms/ssmsfullsetup" -OutFile .\SSMS-Setup-KOR.exe; 
 
 $Parms = " /Install /Quiet /Norestart /Logs log.txt"
 $Prms = $Parms.Split(" ")
 & .\SSMS-Setup-KOR.exe $Prms | Out-Null
-```
 
-Robo 3T
+# Robo 3T 설치
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://download-test.robomongo.org/windows/robo3t-1.3.1-windows-x86_64-7419c406.zip" -OutFile .\robo3t.zip; 

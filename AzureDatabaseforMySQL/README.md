@@ -7,7 +7,7 @@ Azure CLI로 아래와 같이 실행 합니다
 
 ```powershell
 # 기존 vm과 동일한 리소스 그룹 (만일 없다면 신규 생성 필요 az group create --name "resourceGroupName" --location "koreacentral")
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $location="koreacentral"
 $skuName="GP_Gen5_2"
 $version="5.7"
@@ -28,8 +28,8 @@ Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으
 기존 생성된 Vnet에서 MySQL 서버에 접속할 수 있도록 Service endpoint를 추가 합니다  
 ```powershell
 # 생성된 VM의 vnet과 subnet을 입력 합니다
-$resourceGroup="rg-aztest"
-$vnetName="vnet-aztest"
+$resourceGroup="rg-adstest"
+$vnetName="vnet-adstest"
 $subnetName="subnet-azsn"
 $ruleName="allow-azsn"
 $mySQLName="mysqlname"
@@ -42,7 +42,7 @@ az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --
 
 만일 회사나 집 등 외부에서 접속하기 위해서는 public ip를 접속 가능하도록 변경 합니다  
 ```powershell
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $mySQLName="mysqlname"
 $ruleName="allowmyip"
 $ipAddress="0.0.0.0"
@@ -96,7 +96,7 @@ SET time_zone = 'Asia/Seoul';
 아래 Azure CLI 코드를 사용하여 서버 레벨의 환경 변수를 변경 합니다
 
 ```powershell
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $mySQLName="mysqlname"
 
 # 타임존 변경
@@ -133,7 +133,7 @@ DROP TABLE classicmodels.customers;
 #### CLI 로 실행
 
 ```powershell
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $newServerName="newservername"
 $mySQLName="mysqlname"
 $restorePoint="2020-05-13T13:59:00Z"
@@ -148,8 +148,8 @@ az mysql server restore --resource-group $resourceGroup --name $newServerName --
 
 ```powershell
 # 생성된 VM의 vnet과 subnet을 입력 합니다
-$resourceGroup="rg-aztest"
-$vnetName="vnet-aztest"
+$resourceGroup="rg-adstest"
+$vnetName="vnet-adstest"
 $subnetName="subnet-azsn"
 $ruleName="allow-azsn"
 $mySQLName="restoremysqlname"
