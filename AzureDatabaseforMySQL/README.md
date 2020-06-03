@@ -7,15 +7,16 @@ Azure CLI로 아래와 같이 실행 합니다
 
 ```powershell
 # 기존 vm과 동일한 리소스 그룹 (만일 없다면 신규 생성 필요 az group create --name "resourceGroupName" --location "koreacentral")
+# 파라미터 앞에 *이 붙은 항목은 필수 변경
 $resourceGroup="rg-adstest"
 $location="koreacentral"
 $skuName="GP_Gen5_2"
 $version="5.7"
 
 # 계정 정보 입력 및 MySQL 서버명 입력
-$mySQLName="mysqlname"
-$userName="username"
-$passWord="password"
+$mySQLName="*mysqlname*"
+$userName="*username*"
+$passWord="*password*"
 
 
 az mysql server create --resource-group $resourceGroup --name $mySQLName  --location $location --admin-user $userName --admin-password $passWord --sku-name $skuName --version $version
@@ -27,12 +28,10 @@ Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으
 
 기존 생성된 Vnet에서 MySQL 서버에 접속할 수 있도록 Service endpoint를 추가 합니다  
 ```powershell
-# 생성된 VM의 vnet과 subnet을 입력 합니다
-$resourceGroup="rg-adstest"
+# 앞에서 사전 생성된 VM의 vnet과 subnet을 입력 합니다
 $vnetName="vnet-adstest"
 $subnetName="subnet-adstest"
 $ruleName="allow-azsn"
-$mySQLName="mysqlname"
 
 # 서브넷에 service endpoint 추가
 az network vnet subnet update -g $resourceGroup -n $subnetName --vnet-name $vnetName --service-endpoints Microsoft.SQL
@@ -42,10 +41,8 @@ az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --
 
 만일 회사나 집 등 외부에서 접속하기 위해서는 public ip를 접속 가능하도록 변경 합니다  
 ```powershell
-$resourceGroup="rg-adstest"
-$mySQLName="mysqlname"
 $ruleName="allowmyip"
-$ipAddress="0.0.0.0"
+$ipAddress="*0.0.0.0*"
 
 az mysql server firewall-rule create -g $resourceGroup -s $mySQLName -n $ruleName --start-ip-address $ipAddress --end-ip-address $ipAddress
 ```
@@ -96,8 +93,6 @@ SET time_zone = 'Asia/Seoul';
 아래 Azure CLI 코드를 사용하여 서버 레벨의 환경 변수를 변경 합니다
 
 ```powershell
-$resourceGroup="rg-adstest"
-$mySQLName="mysqlname"
 
 # 타임존 변경
 az mysql server configuration set --name time_zone --resource-group $resourceGroup --server $mySQLName --value "Asia/Seoul"
@@ -119,7 +114,7 @@ MySQL Workbench를 실행한 후 [샘플 데이터베이스](/AzureDatabaseforMy
 ```sql
 SELECT UTC_TIMESTAMP();
 
-DROP TABLE classicmodels.customers;
+DROP TABLE classicmodels.payments;
 ```
 
 #### Portal에서 실행
@@ -133,10 +128,8 @@ DROP TABLE classicmodels.customers;
 #### CLI 로 실행
 
 ```powershell
-$resourceGroup="rg-adstest"
 $newServerName="newservername"
-$mySQLName="mysqlname"
-$restorePoint="2020-05-13T13:59:00Z"
+$restorePoint="*2020-05-13T13:59:00Z*"
 
 az mysql server restore --resource-group $resourceGroup --name $newServerName --restore-point-in-time $restorePoint --source-server $mySQLName
 ```
@@ -147,15 +140,10 @@ az mysql server restore --resource-group $resourceGroup --name $newServerName --
 기존과 동일하게 신규 서버에 대한 Vnet Rule을 추가 합니다  
 
 ```powershell
-# 생성된 VM의 vnet과 subnet을 입력 합니다
-$resourceGroup="rg-adstest"
-$vnetName="vnet-adstest"
-$subnetName="subnet-azsn"
 $ruleName="allow-azsn"
-$mySQLName="restoremysqlname"
 
 # mysql rule 추가
-az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --vnet-name $vnetName --subnet $subnetName
+az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $newServerName --vnet-name $vnetName --subnet $subnetName
 ```
 
 접속 후 삭제 된 classicmodels.customers 테이블이 존재 하는지 확인 합니다  
@@ -166,9 +154,9 @@ mysqldump 등 도구를 통해서 Restore된 신규 MySQL에서 Data를 Export, 
 cmd console에서 MySQL 설치 경로로 이동 후 다음과 같은 명령어로 복구할 수 있습니다  
 
 ```console
-.\mysqldump.exe -p{password} --user={user} --host={restore mysql host} --protocol=tcp --port=3306 --skip-column-statistics "classicmodels" "customers" > {output path.sql}
+.\mysqldump.exe -p{password} --user={user} --host={restore mysql host} --protocol=tcp --port=3306 --skip-column-statistics "classicmodels" "payments" > c:\payments.sql
 
-.\mysql.exe -p{password} --user={user} --host={main mysql host} --port=3306 --protocol=tcp --default-character-set=utf8 --comments --database=classicmodels  < {output path.sql}
+.\mysql.exe -p{password} --user={user} --host={main mysql host} --port=3306 --protocol=tcp --default-character-set=utf8 --comments --database=classicmodels  < c:\payments.sql
 ```
 
 ### 08. Slow Query 모니터링

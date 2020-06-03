@@ -3,12 +3,14 @@
 
 ### 01. Azure SQL Database 생성 (General purpose - 1vCore)
 ```powershell
+# 파라미터 앞에 *이 붙은 항목은 필수 변경
+
 $resourceGroup="rg-adstest"
 $location="koreacentral"
-$serverName="myservername"
-$dbName="myDbname"
-$userName="myUsername"
-$password="myPassword"
+$serverName="*myservername"
+$dbName="*myDbname"
+$userName="*myUsername"
+$password="*myPassword"
 $collation="Korean_Wansung_CI_AS"
 
 
@@ -30,7 +32,7 @@ az sql server vnet-rule create --server $serverName --name $ruleName -g $resourc
 만일 회사나 집 등 외부에서 접속하기 위해서는 public ip를 접속 가능하도록 변경 합니다  
 ```powershell
 $ruleName="allowmyip"
-$ipAddress="0.0.0.0"
+$ipAddress="*0.0.0.0"
 
 az sql server firewall-rule create -g $resourceGroup -s $serverName -n $ruleName --start-ip-address $ipAddress --end-ip-address $ipAddress
 ```
@@ -43,7 +45,7 @@ Azure SQL에서는 손쉽게 전 세계적으로 Replication을 구성할 수 �
 
 ```powershell
 $repLocation="japaneast"
-$repServerName="myservername"
+$repServerName="*myservername"
 
 az sql server create --name $repServerName --resource-group $resourceGroup --location $repLocation --admin-user $userName --admin-password $password
 az sql db replica create --name $dbName --partner-server $repServerName --resource-group $resourceGroup --server $serverName
@@ -58,7 +60,7 @@ Geo-Replication에서는 slave node를 master로 fail-over 하려면 수동으�
 구성을 위해서 아래 Azure CLI로 Replication이 진행된 primary (master), seconday (slave) 서버를 Failover Group에 추가 합니다  
 
 ```powershell
-$fogName="myFogName"
+$fogName="*myFogName"
 
 # 신규 replica를 failover group으로 생성
 az sql failover-group create --name $fogName --partner-server $repServerName  --resource-group $resourceGroup --server $serverName
@@ -68,7 +70,7 @@ FOG (Failover group)을 사용하면 각 SQL Server의 endpoint를 사용하지 
 ![fogendpoint](https://azmyhanson.blob.core.windows.net/azcon/01_fogendpoint.jpg)
 
 
-### 05. Azure SQL Database 생성 (Business critical - 1vCore)
+### 05. Azure SQL Database 생성 (Business critical - 2vCore)
 Azure SQL Database Business critical 혹은 Premium tier 에서는 별도의 비용 없이 Zone Redundant (지원하는 지역에 한함) 및 Read-Only Replica를 사용할 수 있습니다
 
 ![sqlbc](https://docs.microsoft.com/en-us/azure/azure-sql/database/media/read-scale-out/business-critical-service-tier-read-scale-out.png)
@@ -77,8 +79,8 @@ Azure SQL Database Business critical 혹은 Premium tier 에서는 별도의 비
 ```powershell
 $location="japaneast"
 # 기존 General purpose와 다른 변수 입력
-$bcServerName="myservername"
-$bcDbName="mydbname"
+$bcServerName="*myservername"
+$bcDbName="*mydbname"
 
 az sql server create -l $location -g $resourceGroup -n $bcServerName -u $userName -p $password
 az sql db create -g $resourceGroup -s $bcServerName -n $bcDbName --collation $collation --sample-name AdventureWorksLT -e BusinessCritical  -f Gen5 -c 2 --zone-redundant true
@@ -136,7 +138,7 @@ Azure SQL에서는 데이터베이스 간 Join 혹은 조회 및 Linked Server�
 다음 HandsOn에서는 기존 데이터베이스 서버에서 새로운 데이터베이스를 연결 후 두 데이터베이스간 Join하여 쿼리 하는 방법을 알아 봅니다  
 
 ```powershell
-$newDBName="myNewDBName"
+$newDBName="*myNewDBName"
 az sql db create -g $resourceGroup -s $serverName -n $dbName --collation $collation --sample-name AdventureWorksLT -e GeneralPurpose -f Gen4 -c 1
 
 # Allow Azure service

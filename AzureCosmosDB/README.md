@@ -2,9 +2,10 @@
 
 ### 01. Azure Cosmos DB MongoDB API
 ```powershell
-$resourceGroup="rg-aztest"
+# 파라미터 앞에 *이 붙은 항목은 필수 변경
+$resourceGroup="rg-adstest"
 $location="koreacentral"
-$accountName="myAccountName"
+$accountName="*myAccountName"
 
 az cosmosdb create -n $accountName -g $resourceGroup --kind MongoDB --default-consistency-level Eventual --locations regionName=$location
 ```
@@ -25,6 +26,8 @@ db.runCommand({customAction:'getCollection',collection:'restaurants'})
 ```
 
 테스트 파일을 다운로드 및 cosmosdb에 삽입 합니다  
+cosmoshost, password는 azure portal에서 연결 문자열에서 확인 가능 합니다  
+
 ```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/primer-dataset.json" -OutFile C:\restaurants.json; 
@@ -32,7 +35,7 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/mongodb/docs-assets/pr
 # mongoimport를 다운로드 합니다
 Invoke-WebRequest -Uri "https://azmyhanson.blob.core.windows.net/azcon/mongoimport.exe" -OutFile c:\mongoimport.exe; 
 
-c:\mongoimport -h {cosmoshost}.documents.azure.com:10255 -d azcosmostest -c restaurants -u azsycosmos -p {password} --ssl --file c:\restaurants.json
+c:\mongoimport.exe -h {cosmoshost}.documents.azure.com:10255 -d azcosmostest -c restaurants -u azsycosmos -p {password} --ssl --file c:\restaurants.json
 ```
 
 
@@ -88,14 +91,16 @@ azure portal에서 cosmos db account를 선택 합니다
 
 ### 02. Azure CosmosDB SQL API
 ```powershell
-$resourceGroup="rg-aztest"
+$resourceGroup="rg-adstest"
 $location="koreacentral"
-$accountName="myAccountName"
+$accountName="*myAccountName"
 
+# 생성시 koreacentral을 master로, south를 slave로 생성 합니다
 az cosmosdb create -n $accountName -g $resourceGroup --default-consistency-level Eventual `
 --locations regionName=koreacentral failoverpriority=0 `
 --locations regionName=koreasouth failoverpriority=1
 ```
+
 https://raw.githubusercontent.com/Azure-Samples/azure-cosmos-db-sample-data/master/SampleData/VolcanoData.json
 
 

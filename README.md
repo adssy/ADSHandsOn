@@ -24,7 +24,7 @@ az account set --subscription "{your subscription}"
 ### 03. Azure VM 생성
 ```powershell
 # Parameters 임의로 구성되었으며 수정 가능
-
+# 파라미터 앞에 *이 붙은 항목은 필수 변경
 $location="koreacentral"
 $resourceGroup="rg-adstest"
 $vnetName="vnet-adstest"
@@ -38,8 +38,8 @@ $vmName="vm-adstest"
 $vmSize="Standard_D4s_v3"
 
 # 계정 정보 입력
-$AdminUserName="username"
-$AdminPassword="password"
+$AdminUserName="*username"
+$AdminPassword="*password"
 
 
 # Create a resource group.
