@@ -1,5 +1,5 @@
 ## ADSHandsOn Azure Database for MySQL
-기존 환경 마이그레이션 혹은 신규 서비스 구축 시 진행해야 할 기본 구축 가이드  
+기존 환경 마이그레이션 혹은 신규 서비스 구축 시 진행해야 할 기본 구축 가이드 및 일부 기능들을 HandsOn 합니다  
 
 ### 01. Azure Database for MySQL 생성
 기존 생성해둔 VM과 동일한 리소스 그룹에 신규로 생성 합니다  

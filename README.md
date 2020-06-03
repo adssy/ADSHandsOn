@@ -94,7 +94,6 @@ $Prms = $Parms.Split(" ")
 & .\SSMS-Setup-KOR.exe $Prms | Out-Null
 
 # Robo 3T 설치
-```powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://download-test.robomongo.org/windows/robo3t-1.3.1-windows-x86_64-7419c406.zip" -OutFile .\robo3t.zip; 
 Expand-Archive .\robo3t.zip -DestinationPath "C:\Robo3t"
