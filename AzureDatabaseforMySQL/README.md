@@ -187,6 +187,8 @@ Azure Database for MySQL은 읽기 복제를 지원 합니다
 아래 표는 지역마다 가용한 복제 지역을 나타냅니다  
 ![georeplication](https://docs.microsoft.com/ko-kr/azure/mysql/media/concepts-read-replica/read-replica-regions.png#lightbox)  
 
+아래 CLI를 실행하여 기존 MySQL서버에 읽기 전용 복제본을 일본 동부 지역에 생성 합니다  
+
 ```powershell
 $repServerName="repservername"
 $repLocation="japaneast"
