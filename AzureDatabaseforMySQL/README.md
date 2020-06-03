@@ -14,9 +14,9 @@ $skuName="GP_Gen5_2"
 $version="5.7"
 
 # 계정 정보 입력 및 MySQL 서버명 입력
-$mySQLName="*mysqlname*"
-$userName="*username*"
-$passWord="*password*"
+$mySQLName="*mysqlname"
+$userName="*username"
+$passWord="*password"
 
 
 az mysql server create --resource-group $resourceGroup --name $mySQLName  --location $location --admin-user $userName --admin-password $passWord --sku-name $skuName --version $version
@@ -42,7 +42,7 @@ az mysql server vnet-rule create -n $ruleName -g $resourceGroup -s $mySQLName --
 만일 회사나 집 등 외부에서 접속하기 위해서는 public ip를 접속 가능하도록 변경 합니다  
 ```powershell
 $ruleName="allowmyip"
-$ipAddress="*0.0.0.0*"
+$ipAddress="*0.0.0.0"
 
 az mysql server firewall-rule create -g $resourceGroup -s $mySQLName -n $ruleName --start-ip-address $ipAddress --end-ip-address $ipAddress
 ```
@@ -129,7 +129,7 @@ DROP TABLE classicmodels.payments;
 
 ```powershell
 $newServerName="newservername"
-$restorePoint="*2020-05-13T13:59:00Z*"
+$restorePoint="*2020-05-13T13:59:00Z"
 
 az mysql server restore --resource-group $resourceGroup --name $newServerName --restore-point-in-time $restorePoint --source-server $mySQLName
 ```
@@ -167,18 +167,29 @@ Azure Portal에서 생성된 MySQL을 찾아 왼쪽 항목에서 서버로그 �
 
 아래 항목 수정 후 저장 버튼을 클릭 합니다  
 - log_output : file
-- long_query_time : 3
+- long_query_time : 1
 - slw_query_log : ON
 
 
-이제 MySQL Workbench에서 3초 이상 걸리는 쿼리를 사용 합니다  
+이제 MySQL Workbench에서 5초 이상 걸리는 쿼리를 사용 합니다  
 
 ```sql
 SELECT /*+ MAX_EXECUTION_TIME(5000) */ 1 
-FROM classicmodels.customers WHERE SLEEP(1);
+FROM classicmodels.customers WHERE SLEEP(5);
 ```
 
 Azure Portal에서 생성된 서버 로그를 확인 합니다  
 
 
 ### Geo-Replication
+Azure Database for MySQL은 읽기 복제를 지원 합니다  
+읽기 전용 복제본은 마스터 노드와 동일 지역에 생성할 수도 있으며 다른 데이터센터에 생성할 수도 있습니다  
+아래 표는 지역마다 가용한 복제 지역을 나타냅니다  
+![georeplication](https://docs.microsoft.com/ko-kr/azure/mysql/media/concepts-read-replica/read-replica-regions.png#lightbox)  
+
+```powershell
+$repServerName="repservername"
+$repLocation="japaneast"
+
+az mysql server replica create -n $repServerName -g $resourceGroup -s $mySQLName -l $repLocation
+```
