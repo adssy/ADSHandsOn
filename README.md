@@ -1,4 +1,4 @@
-# ADSHandsOn 사전 준비
+# ADSHandsOn
 Azure Database Services handson을 진행하기 위해서  
 테스트용 VM 배포 및 DBMS Tool (Mysql Workbench / SQL Server Management Studio / Robo 3T) 다운로드 및 설치를 진행 합니다
 
