@@ -259,3 +259,11 @@ mysql이 지원하는 많은 storage engine 중 지원하는 engine은 아래 2�
 이외의 제약사항은 아래 docs 참조
 
 docs : https://docs.microsoft.com/ko-kr/azure/mysql/concepts-limits
+
+
+
+
+### To-Be 
+1. Query Performance Insight
+2. Audit log
+3. Monitoring
