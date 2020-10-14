@@ -267,3 +267,4 @@ docs : https://docs.microsoft.com/ko-kr/azure/mysql/concepts-limits
 1. Query Performance Insight
 2. Audit log
 3. Monitoring
+4. replication 구성 (onprem to azure)
