@@ -30,7 +30,7 @@ Expand-Archive .\dt.zip -DestinationPath "C:\dt"
 C:\dt\drop\dt.exe /s:JsonFile /s.Files:C:\VolcanoData.json /t:DocumentDBBulk /t.ConnectionString:"AccountEndpoint=<CosmosDB Endpoint>;AccountKey=<CosmosDB Key>;Database=<CosmosDB Database>;" /t.Collection:VolcanoData /t.CollectionThroughput:2500
 ```
 #### 02-02. Notebook 사용
-[Notebook download (Random Generate)](NoteBooks\ImportNotebookSample.ipynb)
+[Notebook download (Random Generate)](NoteBooks/ImportNotebookSample.ipynb)
 
 
 ### 03. 기본 쿼리 확인
