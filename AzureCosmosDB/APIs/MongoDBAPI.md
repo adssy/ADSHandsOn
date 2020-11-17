@@ -83,14 +83,14 @@ db.runCommand({'getLastRequestStatistics':1})
 
 db.restaurants.find({"cuisine":"American"}).sort({name:1})
 
-
-
 ```
 
 마지막 쿼리는 sort에서 error가 발생 합니다  
+원인은 index가 추가되지 않은 속성에 대해 sort 연산을 지원하지 않기에 발생하는 오류로 인덱스 추가 후 동일 쿼리를 실행해 봅니다  
 
-``` mongodb
+``` c#
 db.restaurants.createIndex({name:1})
+db.restaurants.find({"cuisine":"American"}).sort({name:1})
 ```
 
 

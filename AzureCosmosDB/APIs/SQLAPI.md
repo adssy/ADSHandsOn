@@ -65,3 +65,7 @@ GROUP BY c.Type
 CosmosDB -> 데이터탐색기 -> My Notebooks -> Upload File을 차례로 클릭 후 업로드를 진행 합니다  
 
 혹은 [Notebook sample (Random Generate)](NoteBooks/Notebooks_SQL01.md) 를 사용하여 Notebook을 새로 생성하여 테스트를 진행 합니다  
+
+
+#### 05. Azure Functions와 연동 (Change feed)
+[Azure Functions Trigger HandsOn](APIs/FunctionsTrigger.md)
