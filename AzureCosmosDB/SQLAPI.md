@@ -29,9 +29,6 @@ Expand-Archive .\dt.zip -DestinationPath "C:\dt"
 # 마이그레이션 실행
 C:\dt\drop\dt.exe /s:JsonFile /s.Files:C:\VolcanoData.json /t:DocumentDBBulk /t.ConnectionString:"AccountEndpoint=<CosmosDB Endpoint>;AccountKey=<CosmosDB Key>;Database=<CosmosDB Database>;" /t.Collection:VolcanoData /t.CollectionThroughput:2500
 ```
-#### 02-02. Notebook 사용
-[Notebook download (Random Generate)](NoteBooks/ImportNotebookSample.ipynb)
-
 
 ### 03. 기본 쿼리 확인
 이제 Azure portal에서 생성된 CosmosDB에 접속하여 데이터 탐색기를 클릭 합니다  
@@ -59,5 +56,12 @@ GROUP BY c.Country
 SELECT c.Type,AVG(c.Elevation),MIN(c.Elevation),MAX(c.Elevation)
 FROM c 
 GROUP BY c.Type
-
 ```
+
+#### 04. Notebook 사용
+[Notebook download (Random Generate)](NoteBooks/Notebooks_SQL01.ipynb)
+
+위 링크를 우클릭 후 로컬에 다운로드 합니다  
+CosmosDB -> 데이터탐색기 -> My Notebooks -> Upload File을 차례로 클릭 후 업로드를 진행 합니다  
+
+혹은 [Notebook sample (Random Generate)](NoteBooks/Notebooks_SQL01.md) 를 사용하여 Notebook을 새로 생성하여 테스트를 진행 합니다  

@@ -83,17 +83,16 @@ db.runCommand({'getLastRequestStatistics':1})
 
 db.restaurants.find({"cuisine":"American"}).sort({name:1})
 
-db.restaurants.createIndex({name:1})
+
 
 ```
 
-mongodb에서 지원하는 몇몇 기능들은 사용할 수 없는 기능이 있습니다  
-집계 파이프라인과 유선 프로토콜은 public preview로 제공 됩니다  
+마지막 쿼리는 sort에서 error가 발생 합니다  
 
-azure portal에서 cosmos db account를 선택 합니다  
-왼쪽 메뉴에서 미리 보기 기능을 선택 합니다  
-집계 파이프라인과 MongoDB 3.4 유선 프로토콜을 사용으로 변경 합니다  
+``` mongodb
+db.restaurants.createIndex({name:1})
+```
 
-완료 된 이후 동일 쿼리를 다시 실행해 봅니다  
 
-https://docs.microsoft.com/ko-kr/azure/cosmos-db/mongodb-feature-support-36
+다른 제약들은 아래 링크에서 참조 합니다  
+https://docs.microsoft.com/ko-kr/azure/cosmos-db/mongodb-feature-support-36  
