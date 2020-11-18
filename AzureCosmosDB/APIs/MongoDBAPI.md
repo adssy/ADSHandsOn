@@ -1,3 +1,14 @@
+# MongoDB APIs
+## MongoDB to Azure Cosmos DB Mongo API
+Azure Cosmos DB Mongo API는 최소한의 변경으로 기존 사용하던 MongoDB 환경을 마이그레이션할 수 있습니다  
+HandsOn은 다음과 같은 단계로 진행 됩니다  
+
+- Azure Cosmos DB Mongo API 배포
+- mongodump 파일을 Azure CosmosDB에 import
+- mongodb의 gui tool인 robo 3t를 사용하여 접속 테스트
+- 기존 mongodb 쿼리 테스트 수행
+- 인덱스 추가
+
 ```powershell
 # 파라미터 앞에 *이 붙은 항목은 필수 변경
 $resourceGroup="rg-adstest"
@@ -7,15 +18,15 @@ $accountName="*myAccountName"
 az cosmosdb create -n $accountName -g $resourceGroup --kind MongoDB --default-consistency-level Eventual --locations regionName=$location
 ```
 
-
-robo 3t를 실행 하여 mongodb query로 데이터베이스 및 컬렉션을 생성 합니다  
-
+robo 3t를 설치 합니다  
 ```powershell
 # Robo 3T 설치
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://download-test.robomongo.org/windows/robo3t-1.3.1-windows-x86_64-7419c406.zip" -OutFile .\robo3t.zip; 
 Expand-Archive .\robo3t.zip -DestinationPath "C:\Robo3t"
 ```
+
+robo 3t를 실행 하여 mongodb query로 데이터베이스 및 컬렉션을 생성 합니다  
 
 ```c#
 // azcosmostest 라는 데이터베이스를 생성 합니다  
@@ -31,20 +42,20 @@ db.runCommand({customAction:'getCollection',collection:'restaurants'})
 
 테스트 파일을 다운로드 및 cosmosdb에 삽입 합니다  
 cosmoshost, password는 azure portal에서 연결 문자열에서 확인 가능 합니다  
-
-```powershell
+관리자 권한으로 powershell 실행 후 아래 커맨드를 실행 합니다  
+``` powershell
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/mongodb/docs-assets/primer-dataset/primer-dataset.json" -OutFile C:\restaurants.json; 
 
 # mongoimport를 다운로드 합니다
 Invoke-WebRequest -Uri "https://azmyhanson.blob.core.windows.net/azcon/mongoimport.exe" -OutFile c:\mongoimport.exe; 
 
-c:\mongoimport.exe -h {cosmoshost}.documents.azure.com:10255 -d azcosmostest -c restaurants -u {user_name} -p {password} --ssl --file c:\restaurants.json
+c:\mongoimport.exe -h {cosmoshost}.mongo.cosmos.azure.com:10255 -d azcosmostest -c restaurants -u {user_name} -p {password} --ssl --file c:\restaurants.json
 ```
 
 
-
-이제 몇 가지의 쿼리를 테스트 해볼 수 있습니다  
+## MongoDB Query Test
+이제 몇 가지의 쿼리를 테스트 해볼 수 있습니다 robo 3t에서 쿼리 합니다  
 
 ```c#
 // name field가 존재하고 field값이 공백이 아닌 document를 조회

@@ -1,6 +1,3 @@
-```markdown
-.Net Test
-```
 ``` c#
 #r "nuget: Bogus"
 #r "nuget: System.Linq"
