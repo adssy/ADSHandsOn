@@ -29,7 +29,7 @@ Handson에서는 VolcanoData라는 Sample data를 다운로드 dt 라는 도구�
 ```powershell
 # 샘플 데이터 다운로드
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Invoke-WebRequest -Uri "https://github.com/Azure-Samples/azure-cosmos-db-sample-data/blob/master/SampleData/VolcanoData.json" -OutFile C:\VolcanoData.json; 
+Invoke-WebRequest -Uri "https://sampledatasa.blob.core.windows.net/sampledata/sample3.json" -OutFile C:\VolcanoData.json; 
 
 # 마이그레이션 도구 다운로드 및 설치
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
