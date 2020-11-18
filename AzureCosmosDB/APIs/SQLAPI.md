@@ -12,14 +12,13 @@ HandsOn은 다음과 같은 단계로 진행 됩니다
 ## 01. Azure CosmosDB Account 생성
 아래 정보를 참고하여 Azure Cosmosdb Account를 생성 합니다
 ```powershell
-$resourceGroup="rg-adstest"
-$location="koreacentral"
-$accountName="*myAccountName"
+리소스그룹 : 영문약자-rg (sykim-rg)
+계정이름 : 영문약자-sql (sykim-sql)
+API : 코어(SQL)
+Nobooks : 켜기
+위치 : 동남아시아 (southeast asia)
+용량모드 : 프로비저닝된 처리량
 
-# 생성시 koreacentral을 master로, south를 slave로 생성 합니다
-az cosmosdb create -n $accountName -g $resourceGroup --default-consistency-level Eventual `
---locations regionName=koreacentral failoverpriority=0 `
---locations regionName=koreasouth failoverpriority=1
 ```
 
 ## 02. 데이터 마이그레이션
@@ -122,7 +121,7 @@ headquarters의 하위 모든 항목에 대한 경로 : /headquarters/*
 
 ## 05. Notebook 사용
 [Notebook sample (Random Generate)](Data/Notebooks_SQL01.md) 를 사용하여 Notebook을 생성하여 테스트를 진행 합니다  
-
+[Notebook Upload ](Data/Notebooks_SQL02.md) 를 사용하여 json 파일을 업로드 하는 방법을 알아 봅니다  
 
 ## 06. Azure Functions와 연동 (Change feed)
-[Azure Functions Trigger HandsOn](APIs/FunctionsTrigger.md)
+[Azure Functions Trigger HandsOn](FunctionsTrigger.md)

@@ -9,13 +9,16 @@ HandsOn은 다음과 같은 단계로 진행 됩니다
 - 기존 mongodb 쿼리 테스트 수행
 - 인덱스 추가
 
-```powershell
-# 파라미터 앞에 *이 붙은 항목은 필수 변경
-$resourceGroup="rg-adstest"
-$location="koreacentral"
-$accountName="*myAccountName"
 
-az cosmosdb create -n $accountName -g $resourceGroup --kind MongoDB --default-consistency-level Eventual --locations regionName=$location
+## 리소스 생성 
+
+```powershell
+리소스그룹 : 영문약자-rg (sykim-rg)
+계정이름 : 영문약자-sql (sykim-mongo)
+API : Azure Cosmos DB for MongoDB API
+Nobooks : 켜기
+위치 : 동남아시아 (southeast asia)
+용량모드 : 프로비저닝된 처리량
 ```
 
 robo 3t를 설치 합니다  

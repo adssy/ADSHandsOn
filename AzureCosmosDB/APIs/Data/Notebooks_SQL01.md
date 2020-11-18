@@ -1,3 +1,6 @@
+My Notebooks에서 새로운 노트북을 추가 하고 아래 항목들을 복사하여 넣습니다 (C#)  
+
+
 ``` c#
 #r "nuget: Bogus"
 #r "nuget: System.Linq"

@@ -1,12 +1,22 @@
 # Graph APIs
 Azure Cosmos DB의 Gremlin API는 그래프 컴퓨팅 프레임워크인 Apache TinkerPop를 기반으로 빌드되었습니다  
-HandsOn에서는 다음과 같은 단계로 진행 됩니다  
+HandsOn은 다음과 같은 단계로 진행 됩니다  
 
-- Azure Cosmos DB Gremlin API를 배포  
+- Azure Cosmos DB Gremlin API 배포  
 - 테스트 데이터 삽입  
 - 간단한 쿼리 예제 실행  
 - 기존 RDB SQL과 쿼리 비교  
 
+## 리소스 생성
+
+```powershell
+리소스그룹 : 영문약자-rg (sykim-rg)
+계정이름 : 영문약자-sql (sykim-graph)
+API : Gremlin (그래프)
+Nobooks : 켜기
+위치 : 동남아시아 (southeast asia)
+용량모드 : 프로비저닝된 처리량
+```
 
 ## Add groups (vertices)
 
