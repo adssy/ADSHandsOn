@@ -64,7 +64,7 @@ Azure docs : https://docs.microsoft.com/ko-kr/azure/mysql/concepts-high-availabi
 #### 03-02. VNET<a name="03-02"></a>
 docs : https://docs.microsoft.com/ko-kr/azure/mysql/concepts-data-access-and-security-vnet
 
-Azure Database for MySQL은 기본적으로는 DNS 통신을 하며 방화벽으로 핸들링 됩니다  
+Azure Database for MySQL에 대한 접속은 기본적으로는 DNS 통신을 하며 방화벽으로 핸들링 됩니다  
 기존 서비스와는 service endpoint를 통하여 서브넷간의 통신을 할 수 있고, Public ip로 통신도 가능 합니다  
 
 <img src = "./images/mysql_image_04.PNG" width="80%">
