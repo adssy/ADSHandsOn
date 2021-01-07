@@ -24,6 +24,7 @@
 9. [Slow Query 모니터링](#09)
 10. [Geo-Replication](#10)
 11. [Azure Database for Mysql 제약사항](#11)
+12. [Single Server vs Flexible Server](#12)
 
 
 ### 01. Azure Database for MySQL 생성<a name="01"></a>
@@ -260,7 +261,18 @@ mysql이 지원하는 많은 storage engine 중 지원하는 engine은 아래 2�
 
 docs : https://docs.microsoft.com/ko-kr/azure/mysql/concepts-limits
 
+### 12. Single Server vs Flexible Server.<a name="12"></a>
 
+[Comparing the Mysql deployment options](https://docs.microsoft.com/en-us/azure/mysql/select-right-deployment-type#comparing-the-mysql-deployment-options-in-azure)
+
+|attribute|Single Server|Flexible Server|
+|------|---|---|
+|Mysql Version Support|5.6,5.7,8.0|5.7|
+|Network Connectivity|Public endpoints with server firewall <br>private access with Private Link support |Public endpoints with server firewall <br>Private access with Virtual Network integration|
+|Operating system patching|Automatic|Automatic with custom maintenance window control|
+|MySQL patching|Automatic|Automatic with custom maintenance window control|
+|Service-level agreement(SLA)|99.99% availability SLA|No SLA in preview|
+|Zone redundancy|Not supported|Supported|
 
 
 ### To-Be 
