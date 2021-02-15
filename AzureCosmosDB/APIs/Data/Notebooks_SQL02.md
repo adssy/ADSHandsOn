@@ -6,5 +6,5 @@ Azure CosmosDB에서 Container를 추가 합니다
 
 My Notebooks에서 새로운 노트북을 추가하고 아래 쿼리를 수행 합니다 (C#)
 ``` c#
-%%upload --databaseName "AzTestDB" --containerName "VolcanoData" --url "https://sampledatasa.blob.core.windows.net/sampledata/sample3.json"
+%%upload --databaseName "AzTestDB" --containerName "VolcanoData" --url "https://raw.githubusercontent.com/Azure-Samples/azure-cosmos-db-sample-data/master/SampleData/VolcanoData.json"
 ```
