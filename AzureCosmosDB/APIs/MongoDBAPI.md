@@ -99,6 +99,7 @@ db.restaurants.find({"cuisine":"American"}).sort({name:1})
 
 ```
 
+
 마지막 쿼리는 sort에서 error가 발생 합니다  
 원인은 index가 추가되지 않은 속성에 대해 sort 연산을 지원하지 않기에 발생하는 오류로 인덱스 추가 후 동일 쿼리를 실행해 봅니다  
 
@@ -110,3 +111,17 @@ db.restaurants.find({"cuisine":"American"}).sort({name:1})
 
 다른 제약들은 아래 링크에서 참조 합니다  
 https://docs.microsoft.com/ko-kr/azure/cosmos-db/mongodb-feature-support-36  
+
+
+인덱스 유무에 따라 RU 소모량의 차이도 확인할 수 있습니다
+
+``` C#
+// cuisine field값에 'Bagels' 문자열이 포함된 document를 조회
+db.restaurants.find({cuisine:/Bagels/})
+db.runCommand({'getLastRequestStatistics':1})
+
+db.restaurants.createIndex({cuisine:1})
+
+db.restaurants.find({cuisine:/Bagels/})
+db.runCommand({'getLastRequestStatistics':1})
+```
